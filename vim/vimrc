@@ -1,0 +1,96 @@
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+set laststatus=2
+
+" pathogen manages plugins
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+call pathogen#infect()
+call pathogen#helptags()
+
+" place backup files in folders dedicated to temporary files
+set backupdir=~/.vim/tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim/tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+
+" syntax highlighting
+syntax on 
+
+"set background=light
+"let g:solarized_termcolors=256
+"colorscheme solarized
+
+" tabstop settings
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+set shiftround
+
+set autoindent
+set backspace=indent,eol,start
+set complete-=i
+set smarttab
+
+set nrformats-=octal
+
+" Search is only case-sensitive for upper-case characters
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
+" Use <C-L> to clear the highlighting of :set hlsearch.
+if maparg('<C-L>', 'n') ==# ''
+  nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+endif
+
+" automatically reload files
+set autoread
+
+" Remember more commands and search history
+set history=1000
+
+" Make tab completion for files/buffers act like bash
+set wildmenu
+set wildignore=*.pyc,*.class
+
+" Turn on line numbers
+set number
+
+" Open split panes below or to the right (see
+" https://github.com/thoughtbot/dotfiles/)
+set splitbelow
+set splitright
+
+" remap escape (eliminates reaching for escape key)
+inoremap jj <ESC>
+
+" Leader key on space bar
+let mapleader = ' '
+
+" show commands
+set showcmd
+
+set scrolloff=3
+set sidescrolloff=5
+
+" NERDTree toggling
+nmap <silent> <leader>n :NERDTreeToggle<CR>
+
+" Gundo toggling
+nmap <silent> <leader>g :GundoToggle<CR>
+
+" ZoomWin toggling
+nnoremap <silent> <leader><leader> :ZoomWin<CR>
+
+" Gitv should automatically decide where to place preview
+let g:Gitv_OpenHorizontal = "auto"
+
+" IMPORTANT: grep will sometimes skip displaying the file name if you
+" search in a single file. This will confuse Latex-Suite. Set your grep
+" program to always generate a file-name.
+set grepprg=grep\ -nH\ $*
+
+" quick editing of .vimrc (from sanitz)
+nnoremap <silent> <leader>e :e! ~/.vimrc<cr>
+nnoremap <silent> <leader>s :source ~/.vimrc<cr>
