@@ -1,13 +1,61 @@
+set shell=bash
+set clipboard=unnamed
+
+set t_Co=256
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
 set laststatus=2
 
-" pathogen manages plugins
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-call pathogen#infect()
-call pathogen#helptags()
+"----------------------------------------------
+call plug#begin('~/.vim/plugged')
+
+" Make sure you use single quotes
+
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+Plug 'vim-syntastic/syntastic'
+Plug 'tpope/vim-projectionist'
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'tpope/vim-dispatch'
+Plug 'kien/ctrlp.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'snoe/clj-refactor.nvim'
+Plug 'posva/vim-vue'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+
+
+
+" Any valid git URL is allowed
+Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+
+" Multiple Plug commands can be written in a single line using | separators
+"Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+" On-demand loading
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'tpope/vim-classpath', { 'for': 'clojure' }
+Plug 'tpope/vim-salve', { 'for': 'clojure' }
+Plug 'vim-scripts/paredit.vim', { 'for': 'clojure' }
+Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
+Plug 'guns/vim-clojure-highlight', { 'for': 'clojure' }
+Plug 'venantius/vim-cljfmt', { 'for': 'clojure' }
+Plug 'venantius/vim-eastwood', { 'for': 'clojure' }
+
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'mxw/vim-jsx', { 'for': 'javascript' }
+Plug 'wookiehangover/jshint.vim', { 'for': 'javascript' }
+Plug 'ternjs/tern_for_vim', { 'for': 'javascript' }
+
+" Initialize plugin system
+call plug#end()
+"----------------------------------------------
 
 " place backup files in folders dedicated to temporary files
 set backupdir=~/.vim/tmp,~/.tmp,~/tmp,/var/tmp,/tmp
@@ -41,7 +89,7 @@ set hlsearch
 set incsearch
 " Use <C-L> to clear the highlighting of :set hlsearch.
 if maparg('<C-L>', 'n') ==# ''
-  nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+ nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
 endif
 
 " automatically reload files
@@ -77,6 +125,9 @@ set sidescrolloff=5
 " NERDTree toggling
 nmap <silent> <leader>n :NERDTreeToggle<CR>
 
+" find files with fzf
+nmap <leader>ff :FZF<cr>
+
 " Gundo toggling
 nmap <silent> <leader>g :GundoToggle<CR>
 
@@ -94,3 +145,25 @@ set grepprg=grep\ -nH\ $*
 " quick editing of .vimrc (from sanitz)
 nnoremap <silent> <leader>e :e! ~/.vimrc<cr>
 nnoremap <silent> <leader>s :source ~/.vimrc<cr>
+
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
+" Evaluate Clojure buffers on load
+autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
+
+autocmd VimEnter * RainbowParenthesesToggle
+autocmd Syntax   clojure RainbowParenthesesLoadRound
+autocmd Syntax   clojure RainbowParenthesesLoadSquare
+autocmd Syntax   clojure RainbowParenthesesLoadBraces
+
+" Clojure fireplace bindings
+:nmap ,r :Require! <bar> :RunTests<CR><CR>
+:nmap ,e :.Eval<CR>
+
+
+nmap <leader>l :set list!<CR>
+set listchars=tab:▸\ ,eol:¬
+highlight NonText guifg=#4a4a59
+highlight SpecialKey guifg=#4a4a59
+
+let g:clj_refactor_prefix_rewriting = 0
